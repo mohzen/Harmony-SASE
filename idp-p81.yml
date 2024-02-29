@@ -1,0 +1,91 @@
+---
+- hosts: localhost
+  connection: local 
+  become: true
+  gather_facts: false
+  vars: 
+    AZURE_CLIENT_ID: "82270312-4d6e-4fc7-bda7-afc862971d3c"
+    AZURE_TENANT_ID: "57d4f58b-7694-4570-a6f6-1ec4eb62b1fd"
+    AZURE_CLIENT_SECRET: "Zgp8Q~nvm4Bws23CE.6UBUPkxGndrUbS8O1KWbHb"
+    AZInstantiateP81DisplayName: "Perimeter 81"
+    samlPerimeterRedirectUris: "https://auth.perimeter81.com/login/callback?connection=teamit-oc"
+    samlPerimeterIdentifierUris: "urn:auth0:perimeter81:teamit-oc"
+  vars_files:
+    # # required by azure
+    - vars/azure/payloads/token.yml
+    - vars/azure/payloads/instantiate-p81.yml
+    - vars/azure/payloads/sso.yml
+    - vars/azure/payloads/saml-perimeter.yml
+
+  tasks:
+
+    - name: Get Token MS Graph
+      import_tasks: tasks/azure/create-token.yml
+
+    - name: Install P81 
+      import_tasks: tasks/azure/instantiate-p81.yml
+
+    - name: Sleep to Wait azure Processing Our last Request in 60 second(s)
+      ansible.builtin.pause:
+        seconds: 60
+
+    - name: Enable SSO
+      import_tasks: tasks/azure/enable-sso-perimeter.yml
+
+    - name: Set SAML URL
+      import_tasks: tasks/azure/set-saml-perimeter.yml
+
+    - name: Generate Certificate
+      import_tasks: tasks/azure/gen-certificate-perimeter.yml
+
+    # - name: Groups Claim
+    #   import_tasks: tasks/azure/change-groups-claim-name.yml
+
+    # - name: Update saml Groups Claim
+    #   import_tasks: tasks/azure/update-saml-groups-claim.yml
+
+    # # portal checkpoint installation
+    # - name: Get token task
+    #   import_tasks: tasks/x-token.yml
+
+    # - name: Update Tenant Active
+    #   import_tasks: tasks/update-tenant-active.yml
+    #   when: IDPType == "azure"
+
+    # - name: Debug Ansible facts
+    #   debug:
+    #     var: IDPType
+
+    # - name: Debug Ansible facts
+    #   debug:
+    #     var: IDPMultipleOrg
+
+    # - name: Request UUID Domain
+    #   import_tasks: tasks/idp/domain-validation.yml
+    #   when: 
+    #     - IDPType == "azure"
+
+    # - name: Update SAML URL
+    #   import_tasks: tasks/azure/set-saml-url.yml
+
+    # - name: Domain Validation
+    #   import_tasks: tasks/idp/validate.yml
+    #   when: 
+    #     - IDPType == "azure"
+    #     - IDPMultipleOrg == "single" 
+
+    # - name: Get Certificate
+    #   import_tasks: tasks/idp/get-certificate-azure.yml
+    #   when: IDPType == "azure"
+
+    # - name: Install IDP Azure
+    #   import_tasks: tasks/idp/idp-config.yml
+    #   when: IDPType == "azure"
+
+    # - name: Install IDP Azure SAML
+    #   import_tasks: tasks/idp/idp-config-saml.yml
+    #   when: IDPType == "azure"
+
+    
+
+

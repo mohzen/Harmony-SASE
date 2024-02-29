@@ -1,0 +1,8 @@
+---
+set_saml_perimeter:
+  web:
+    redirectUris:
+    - "{{samlPerimeterRedirectUris}}"
+  identifierUris:
+  - "{{samlPerimeterIdentifierUris}}"
+
