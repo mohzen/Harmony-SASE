@@ -1,0 +1,17 @@
+---
+- name: Add Platform Web
+  uri:
+    url: "https://graph.microsoft.com/v1.0/myorganization/applications/{{essentials_perimeter_object_id}}"
+    method: PATCH
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer {{ ad_token }}"
+    body_format: json
+    body: "{{ addPlatform | to_json }}"
+  register: addPlatform
+  failed_when: addPlatform.status != 200 and addPlatform.status != 201 and addPlatform.status != 204
+
+- name: Print addPlatform
+  debug:
+    var: addPlatform
+

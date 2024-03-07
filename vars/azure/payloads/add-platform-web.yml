@@ -1,0 +1,11 @@
+---
+addPlatform:
+  spa:
+    redirectUris: []
+  publicClient:
+    redirectUris: []
+  web:
+    redirectUris:
+    - "{{scimPerimeterRedirectUris}}"
+    - "https://auth.perimeter81.com/login/callback"
+    logoutUrl: "{{scimPerimeterLogoutURI}}"

@@ -1,0 +1,48 @@
+---
+- hosts: localhost
+  connection: local 
+  become: true
+  gather_facts: false
+  vars: 
+    AZURE_CLIENT_ID: "82270312-4d6e-4fc7-bda7-afc862971d3c"
+    AZURE_TENANT_ID: "57d4f58b-7694-4570-a6f6-1ec4eb62b1fd"
+    AZURE_CLIENT_SECRET: "Zgp8Q~nvm4Bws23CE.6UBUPkxGndrUbS8O1KWbHb"
+    AZInstantiateP81DisplayName: "SCIM P81"
+    scimPerimeterRedirectUris: "https://teamit.perimeter81.com"
+    scimPerimeterLogoutURI: "https://teamit.perimeter81.com"
+  vars_files:
+    # # required by azure
+    - vars/azure/payloads/token.yml
+    - vars/azure/payloads/instantiate-p81.yml
+    - vars/azure/payloads/add-platform-web.yml
+    - vars/azure/payloads/add-permission.yml
+    - vars/azure/payloads/add-secret.yml
+
+  tasks:
+
+    - name: Get Token MS Graph
+      import_tasks: tasks/azure/create-token.yml
+
+    - name: Install P81 
+      import_tasks: tasks/azure/instantiate-p81.yml
+
+    - name: Sleep to Wait azure Processing Our last Request in 60 second(s)
+      ansible.builtin.pause:
+        seconds: 60
+
+    - name: Add Platform
+      import_tasks: tasks/azure/add-platform-web.yml
+    
+    - name: Add Permission
+      import_tasks: tasks/azure/add-permission.yml
+
+    - name: Add Secret
+      import_tasks: tasks/azure/add-secret.yml
+
+    - name: Print Variables
+      debug:
+        msg: |
+          Client ID : {{ app_perimeter_id }}
+          Client Secret: {{ secret }}
+
+   

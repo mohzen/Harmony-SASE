@@ -1,0 +1,15 @@
+---
+adminConsent:
+  clientAppId: "{{app_perimeter_id}}"
+  onBehalfOfAll: true
+  checkOnly: false
+  tags: []
+  constrainToRra: true
+  dynamicPermissions:
+  - appIdentifier: 00000003-0000-0000-c000-000000000000
+    appRoles: []
+    scopes:
+    - Directory.Read.All
+    - Group.Read.All
+    - User.Read
+

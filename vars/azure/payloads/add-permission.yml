@@ -1,0 +1,12 @@
+---
+#user read directory read group read
+addPermission:
+  requiredResourceAccess:
+  - resourceAppId: 00000003-0000-0000-c000-000000000000
+    resourceAccess:
+    - id: 06da0dbc-49e2-44d2-8312-53f166ab848a
+      type: Scope
+    - id: 5f8c59db-677d-491f-a6b8-5f174b11ec1d
+      type: Scope
+    - id: e1fe6dd8-ba31-4d61-89e7-88639da4683d
+      type: Scope

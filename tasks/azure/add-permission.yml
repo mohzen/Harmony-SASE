@@ -1,0 +1,34 @@
+---
+- name: Add Permission
+  uri:
+    url: "https://graph.microsoft.com/v1.0/myorganization/applications/{{essentials_perimeter_object_id}}"
+    method: PATCH
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer {{ ad_token }}"
+    body_format: json
+    body: "{{ addPermission | to_json }}"
+  register: addPermission
+  failed_when: addPermission.status != 200 and addPermission.status != 201 and addPermission.status != 204
+
+- name: Print addPermission
+  debug:
+    var: addPermission
+
+# disabled not support yet using this token
+# - name: Admin Consent
+#   uri:
+#     url: "https://graph.windows.net/myorganization/consentToApp?api-version=2.0"
+#     method: POST
+#     headers:
+#       Content-Type: "application/json"
+#       Authorization: "Bearer {{ ad_token }}"
+#     body_format: json
+#     body: "{{ adminConsent | to_json }}"
+#   register: adminConsent
+#   failed_when: adminConsent.status != 200 and adminConsent.status != 201 and adminConsent.status != 204
+
+# - name: Print adminConsent
+#   debug:
+#     var: adminConsent
+
